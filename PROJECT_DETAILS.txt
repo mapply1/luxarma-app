@@ -1,0 +1,543 @@
+# LUXARMA APP - COMPREHENSIVE PROJECT DETAILS
+
+## PROJECT OVERVIEW
+================================================================================
+
+**Project Name:** LUXARMA APP  
+**Type:** Client Project Management Platform  
+**Technology Stack:** Next.js 13, TypeScript, Supabase, Tailwind CSS  
+**Purpose:** Complete project management solution for creative agencies with dual interfaces (admin/client)  
+**Owner:** Armand (Web development specialist)  
+**Target Users:** Creative agencies and their clients  
+
+## BUSINESS CONTEXT
+================================================================================
+
+Based on the project structure and data models, LUXARMA is a comprehensive project management platform designed specifically for creative agencies (particularly web design/development agencies). The platform facilitates:
+
+- **Agency Operations:** Project tracking, client management, prospect conversion, task management
+- **Client Experience:** Project visibility, milestone tracking, document access, communication tools
+- **Business Growth:** Lead tracking, prospect management, conversion funnels
+
+The platform name "LUXARMA" and branding suggest a premium positioning targeting high-end creative services.
+
+## TECHNOLOGY ARCHITECTURE
+================================================================================
+
+### Frontend Framework
+- **Next.js 13.5.1** with App Router
+- **TypeScript 5.2.2** for type safety
+- **React 18.2.0** for UI components
+- **Font:** Onest (custom font family)
+
+### Backend & Database
+- **Supabase** for backend services
+  - PostgreSQL database with Row Level Security (RLS)
+  - Authentication system with role-based access
+  - File storage for documents and attachments
+  - Real-time subscriptions
+
+### UI & Styling
+- **Tailwind CSS 3.3.3** for styling
+- **Radix UI** components for accessible UI primitives
+- **shadcn/ui** component system
+- **Custom Luxarma color palette:**
+  - Primary: #0048f8 (blue)
+  - CTA: #0c120d (dark)
+  - Accent colors: amber, emerald, red
+
+### State Management & Data Fetching
+- **TanStack React Query** for server state management
+- **React Hook Form** with Zod validation
+- Custom hooks for data operations
+
+### Additional Libraries
+- **Iconoir React** and **Lucide React** for icons
+- **Sonner** for toast notifications
+- **React Beautiful DnD** for drag & drop
+- **React Signature Canvas** for document signing
+- **Recharts** for data visualization
+- **React Dropzone** for file uploads
+
+## DATABASE SCHEMA
+================================================================================
+
+### Core Entities
+
+#### 1. Clients Table
+```sql
+- id (uuid, PK)
+- prenom (text) - First name
+- nom (text) - Last name  
+- email (text, unique)
+- entreprise (text, optional) - Company
+- telephone (text, optional)
+- ville (text, optional) - City
+- linkedin_url (text, optional)
+- created_at, updated_at (timestamps)
+```
+
+#### 2. Projects Table
+```sql
+- id (uuid, PK)
+- titre (text) - Title
+- description (text)
+- client_id (uuid, FK to clients)
+- statut (enum: en_attente, en_cours, en_revision, termine, suspendu)
+- date_debut (date) - Start date
+- date_fin_prevue (date) - Expected end date
+- date_fin_reelle (date, optional) - Actual end date
+- budget (numeric, optional)
+- liens_admin (text[]) - Admin links array
+- created_at, updated_at (timestamps)
+```
+
+#### 3. Milestones Table
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- titre (text) - Title
+- description (text)
+- statut (enum: a_faire, en_cours, termine) - To do, In progress, Done
+- date_prevue (date) - Expected date
+- date_completee (date, optional) - Completion date
+- ordre (integer) - Order/sequence
+- created_at, updated_at (timestamps)
+```
+
+#### 4. Tasks Table
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- milestone_id (uuid, optional FK to milestones)
+- titre (text) - Title
+- description (text, optional)
+- statut (enum: a_faire, en_cours, termine)
+- priorite (enum: basse, moyenne, haute) - Low, Medium, High
+- assignee (text, optional)
+- date_echeance (date, optional) - Due date
+- created_at, updated_at (timestamps)
+```
+
+#### 5. Tickets Table (Support System)
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- titre (text) - Title
+- description (text)
+- statut (enum: ouvert, en_cours, resolu, ferme) - Open, In progress, Resolved, Closed
+- priorite (enum: basse, moyenne, haute)
+- created_by (enum: admin, client)
+- created_at, updated_at (timestamps)
+```
+
+#### 6. Documents Table
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- nom (text) - Name
+- type (text) - MIME type
+- url (text) - File URL
+- taille (bigint) - File size
+- storage_path (text, optional) - Supabase storage path
+- uploaded_by (enum: admin, client)
+- requires_signature (boolean, optional)
+- is_signed (boolean, optional)
+- signed_at (timestamp, optional)
+- signature_data (text, optional)
+- created_at (timestamp)
+```
+
+#### 7. Prospects Table (CRM)
+```sql
+- id (uuid, PK)
+- nom, prenom (text) - Last name, First name
+- email (text)
+- telephone, entreprise, ville (text, optional)
+- type_demande (enum) - Service type requested:
+  * landing_framer, site_multipage_framer, refonte_framer
+  * integration_design_framer, ux_ui_figma, formation_framer
+  * partenariats, autres, site, formation, partenariat, autre
+- budget_range (text, optional)
+- echeance_souhaitee (text, optional) - Desired deadline
+- description_projet (text)
+- statut (enum: nouveau, contacte, qualifie, negocie, converti, perdu, archive)
+- source (text) - Lead source (e.g., "Tally Form", "LinkedIn")
+- resume_auto (text, optional) - Auto-generated summary
+- notes_internes (text, optional) - Internal notes
+- discovery_call_resume (text, optional) - Discovery call summary
+- tally_submission_url (text, optional)
+- documents (text[], optional) - Document URLs
+- historique_interactions (array, optional) - Interaction history
+- converted_client_id, converted_project_id (uuid, optional)
+- created_at, updated_at (timestamps)
+```
+
+#### 8. Comments Table
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- task_id (uuid, optional FK to tasks)
+- milestone_id (uuid, optional FK to milestones)
+- content (text)
+- created_by_client_id (uuid, FK to clients)
+- created_at, updated_at (timestamps)
+- Constraint: exactly one of task_id or milestone_id must be set
+```
+
+#### 9. Reviews Table
+```sql
+- id (uuid, PK)
+- projet_id (uuid, FK to projects)
+- milestone_id (uuid, optional FK to milestones)
+- note (integer, 1-5) - Rating
+- commentaire (text, optional) - Comment
+- created_at (timestamp)
+```
+
+#### 10. Notifications Table
+```sql
+- id (uuid, PK)
+- type (enum: comment, ticket, review, task_created, task_updated, 
+       milestone_created, milestone_updated, document_uploaded)
+- title (text)
+- message (text)
+- projet_id (uuid, FK to projects)
+- client_id (uuid, FK to clients)
+- related_id (text) - ID of related entity
+- is_read (boolean)
+- created_at (timestamp)
+- read_at (timestamp, optional)
+```
+
+#### 11. Ticket Attachments Table
+```sql
+- id (uuid, PK)
+- ticket_id (uuid, FK to tickets)
+- nom (text) - Name
+- type (text) - MIME type
+- url (text) - File URL
+- taille (integer) - File size
+- storage_path (text) - Storage path
+- uploaded_by_client_id (uuid, FK to clients)
+- created_at (timestamp)
+```
+
+#### 12. Prospect Interactions Table
+```sql
+- id (uuid, PK)
+- prospect_id (uuid, FK to prospects)
+- type (enum: email, appel, meeting, note) - Email, Call, Meeting, Note
+- titre (text) - Title
+- description (text)
+- created_at (timestamp)
+- created_by (text)
+```
+
+### Database Features
+- **Row Level Security (RLS)** enabled on all tables
+- **Automated triggers** for updated_at timestamps
+- **Notification triggers** for real-time updates
+- **Comprehensive indexing** for performance
+- **Foreign key constraints** for data integrity
+
+## AUTHENTICATION & AUTHORIZATION
+================================================================================
+
+### Authentication System
+- **Supabase Auth** with email/password
+- **Role-based access control** with user metadata
+- **Protected routes** with role verification
+- **Automatic redirects** based on user role
+
+### User Roles
+
+#### Admin Role
+- Full access to all data and functionality
+- Project creation and management
+- Client account creation
+- Prospect management and conversion
+- Task and milestone management
+- Document upload and management
+- System settings and configuration
+
+#### Client Role
+- Project-specific access only
+- View assigned projects and details
+- Access to milestones and tasks
+- Document viewing and downloading
+- Ticket creation and management
+- Comment submission
+- Review and rating submission
+- Document signing capabilities
+
+### Security Policies
+- **Client isolation:** Clients can only access their own project data
+- **Admin oversight:** Admins have read/write access to all data
+- **Secure file storage:** Document access controlled via RLS
+- **API protection:** All endpoints protected by authentication
+
+## APPLICATION STRUCTURE
+================================================================================
+
+### Route Structure
+
+#### Public Routes
+- `/` - Landing page (redirects to login)
+- `/login` - Authentication page with role-based redirect
+
+#### Admin Routes (`/admin`)
+- `/admin` - Dashboard with project overview
+- `/admin/projects` - Project management
+- `/admin/projects/[id]` - Individual project details
+- `/admin/clients` - Client management
+- `/admin/clients/[id]` - Individual client details
+- `/admin/prospects` - Prospect/lead management
+- `/admin/prospects/[id]` - Individual prospect details
+- `/admin/tasks` - Task management across projects
+- `/admin/milestones/[id]` - Milestone details
+- `/admin/notifications` - System notifications
+- `/admin/settings` - Application settings
+
+#### Client Routes (`/app`)
+- `/app` - Client dashboard
+- `/app/roadmap` - Project roadmap and milestones
+- `/app/milestones/[id]` - Individual milestone details
+- `/app/tasks` - Assigned tasks
+- `/app/documents` - Project documents
+- `/app/tickets` - Support tickets
+- `/app/review` - Project review and rating
+- `/app/notifications` - Client notifications
+
+### Component Architecture
+
+#### UI Components (`/components/ui`)
+Comprehensive design system based on shadcn/ui:
+- Form elements: Button, Input, Textarea, Select, Checkbox, etc.
+- Layout: Card, Sheet, Dialog, Sidebar, Accordion, etc.
+- Feedback: Alert, Toast, Loading, Progress, etc.
+- Data display: Table, Badge, Tooltip, Pagination, etc.
+- Navigation: Breadcrumb, Tabs, Command palette, etc.
+
+#### Admin Components (`/components/admin`)
+- `admin-sidebar.tsx` - Navigation with real-time counts
+- `admin-layout-wrapper.tsx` - Layout container
+- `admin-command-palette.tsx` - Quick actions
+- `clients-table.tsx` - Client data table
+- `projects-table.tsx` - Project data table
+- `prospects-table.tsx` - Prospect data table
+- `client-form.tsx` - Client creation/editing
+- `project-form.tsx` - Project creation/editing
+- `prospect-form.tsx` - Prospect management
+- `create-client-account-modal.tsx` - Client account creation
+- `prospect-conversion-modal.tsx` - Convert prospect to client
+
+#### Client Components (`/components/client`)
+- `client-sidebar.tsx` - Client navigation with project switcher
+- `client-layout-wrapper.tsx` - Client layout container
+- `client-command-palette.tsx` - Client quick actions
+- `milestone-timeline.tsx` - Visual project timeline
+- `milestone-card.tsx` - Individual milestone display
+- `tasks-table.tsx` - Task listing and filtering
+- `task-details-modal.tsx` - Task detail view
+- `documents-grid.tsx` - Document gallery
+- `document-preview-modal.tsx` - Document viewer
+- `document-signature-modal.tsx` - Document signing
+- `tickets-table.tsx` - Support ticket management
+- `ticket-form.tsx` - Ticket creation
+- `comments-section.tsx` - Comment system
+- `review-form.tsx` - Project review submission
+
+#### Authentication Components (`/components/auth`)
+- `protected-route.tsx` - Route protection wrapper
+- `logout-button.tsx` - Logout functionality
+
+### Custom Hooks (`/hooks`)
+Data management hooks using React Query:
+- `use-clients.ts` - Client CRUD operations
+- `use-projects.ts` - Project management
+- `use-tasks.ts` - Task operations
+- `use-milestones.ts` - Milestone management
+- `use-tickets.ts` - Support ticket system
+- `use-notifications.ts` - Notification system
+- `use-prospects.ts` - Prospect management
+- `use-comments.ts` - Comment system
+- `use-client-data.ts` - Client-specific data hooks
+- `use-client-notifications.ts` - Client notification hooks
+- `use-ticket-attachments.ts` - File attachment handling
+
+## KEY FEATURES
+================================================================================
+
+### Project Management
+- **Multi-project support** with client isolation
+- **Visual roadmaps** and milestone tracking
+- **Task assignment** and priority management
+- **Status tracking** with automated notifications
+- **Budget and timeline management**
+- **Admin link storage** for internal tools
+
+### Client Portal
+- **Project-specific dashboards** 
+- **Real-time progress tracking**
+- **Document access** with signing capabilities
+- **Support ticket system**
+- **Comment and feedback system**
+- **Review and rating system**
+- **Multi-project support** with easy switching
+
+### CRM & Lead Management
+- **Prospect tracking** with detailed profiles
+- **Lead scoring** and status management
+- **Conversion tracking** from prospect to client
+- **Interaction history** logging
+- **Source attribution** for marketing ROI
+- **Automated summaries** and notes
+
+### Document Management
+- **Secure file storage** via Supabase Storage
+- **File type validation** and size limits
+- **Version control** and access logging
+- **Digital signature** support
+- **Preview and download** capabilities
+- **Project-specific organization**
+
+### Communication System
+- **Real-time notifications** for all actions
+- **Comment threads** on tasks and milestones
+- **Support ticket system** with priority levels
+- **Email-style messaging** between admin and clients
+- **Automated status updates**
+
+### Analytics & Reporting
+- **Project progress tracking**
+- **Client satisfaction metrics**
+- **Task completion rates**
+- **Timeline adherence**
+- **Budget vs. actual analysis**
+
+## INTEGRATIONS & EXTERNAL SERVICES
+================================================================================
+
+### Supabase Services
+- **Database:** PostgreSQL with RLS
+- **Authentication:** Email/password with metadata
+- **Storage:** Document and file management
+- **Real-time:** Live updates and notifications
+- **Edge Functions:** Server-side logic (if applicable)
+
+### Third-Party Integrations
+- **Tally Forms** - Lead capture integration
+- **LinkedIn** - Prospect data enhancement
+- **Email services** - Notification delivery
+- **File preview services** - Document rendering
+
+### Storage Configuration
+- **Document bucket** with public access
+- **File validation** and size limits (10MB max)
+- **Supported formats:** PDF, DOC, DOCX, JPEG, PNG, GIF, WebP
+- **Organized structure:** `projectId/documentId/filename`
+
+## DEPLOYMENT & CONFIGURATION
+================================================================================
+
+### Environment Requirements
+- Node.js 18+ (using Next.js 13.5.1)
+- Supabase project with configured database
+- Environment variables:
+  - `NEXT_PUBLIC_SUPABASE_URL`
+  - `NEXT_PUBLIC_SUPABASE_ANON_KEY`
+
+### Build Configuration
+- **ESLint:** Configured with Next.js rules (build warnings ignored)
+- **TypeScript:** Strict mode enabled
+- **Transpilation:** Lucide React and Iconoir React
+- **PostCSS:** Tailwind CSS processing
+- **Path aliases:** `@/*` for root-relative imports
+
+### Performance Optimizations
+- **React Query caching** with optimized stale times
+- **Image optimization** via Next.js
+- **Code splitting** by route
+- **Lazy loading** for heavy components
+- **Database indexing** for all foreign keys
+
+## MOCK DATA & TESTING
+================================================================================
+
+The project includes comprehensive mock data (`lib/mockData.ts`) for development and testing:
+- Sample clients (Sophie Dubois, Marc Martin)
+- Example projects with realistic timelines
+- Milestone and task examples
+- Document samples with various file types
+- Support ticket examples
+- Prospect data with different lead sources
+- Review and interaction samples
+
+## BUSINESS LOGIC
+================================================================================
+
+### Prospect to Client Conversion Flow
+1. **Lead Capture** - Via Tally forms or manual entry
+2. **Qualification** - Status tracking through sales funnel
+3. **Discovery Calls** - Notes and summary storage
+4. **Proposal** - Budget and timeline definition
+5. **Conversion** - Automatic client and project creation
+6. **Project Kickoff** - Milestone and task setup
+
+### Project Lifecycle Management
+1. **Project Creation** - Client assignment and initial setup
+2. **Milestone Planning** - Ordered milestone creation
+3. **Task Assignment** - Granular work breakdown
+4. **Progress Tracking** - Status updates and notifications
+5. **Client Communication** - Comments and ticket system
+6. **Document Delivery** - File sharing and signatures
+7. **Project Completion** - Final review and closure
+
+### Notification System
+- **Real-time updates** for all project activities
+- **Role-specific filtering** (admin vs. client views)
+- **Automatic triggers** for status changes
+- **Email integration** potential for external notifications
+
+## FUTURE ENHANCEMENTS
+================================================================================
+
+Based on the current architecture, potential enhancements include:
+- **Time tracking** integration
+- **Invoice generation** from project data
+- **Advanced reporting** and analytics
+- **Email automation** workflows
+- **Mobile app** development
+- **API endpoints** for third-party integrations
+- **White-label** customization options
+- **Multi-language** support
+
+## TECHNICAL DEBT & CONSIDERATIONS
+================================================================================
+
+### Current State
+- No initial Git commits (new project)
+- Mock data implementation suggests development phase
+- Comprehensive type definitions indicate mature planning
+- Full authentication and authorization system in place
+
+### Recommendations
+- Implement comprehensive error boundary system
+- Add unit and integration testing
+- Set up CI/CD pipeline
+- Implement monitoring and logging
+- Add performance tracking
+- Consider database migration strategy for production
+
+## SUMMARY
+================================================================================
+
+LUXARMA APP is a sophisticated, full-stack project management platform specifically designed for creative agencies. It provides a comprehensive solution for managing the entire client lifecycle from lead generation through project completion. The platform features a modern tech stack with robust security, real-time capabilities, and an intuitive user experience for both administrators and clients.
+
+The application demonstrates enterprise-level architecture with proper separation of concerns, comprehensive data modeling, and scalable design patterns. It's positioned as a premium solution for agencies looking to streamline their operations while providing exceptional client experiences.
+
+**Last Updated:** January 2025
+**Status:** Development/Pre-production
+**Architecture:** Next.js 13 + Supabase + TypeScript
+**Target Market:** Creative agencies and web development studios

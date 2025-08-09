@@ -22,9 +22,8 @@ const nextConfig = {
   poweredByHeader: false,
   compress: true,
   
-  // Asset optimization - unoptimized for static export
+  // Asset optimization
   images: {
-    unoptimized: true,
     domains: ['ycdyarkrxkhqkpkzvdno.supabase.co', 'images.unsplash.com', 'images.pexels.com'],
     formats: ['image/webp', 'image/avif'],
   },

@@ -14,6 +14,10 @@ export const metadata: Metadata = {
   creator: 'Luxarma',
   publisher: 'Luxarma',
   robots: 'index, follow',
+  icons: {
+    icon: '/favicon.svg',
+    apple: '/favicon-light.svg',
+  },
   openGraph: {
     type: 'website',
     locale: 'fr_FR',

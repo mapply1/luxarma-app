@@ -71,8 +71,8 @@ function LoginForm() {
   };
 
   return (
-    <div className="min-h-screen flex items-center justify-center p-4">
-      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-white rounded-3xl overflow-hidden shadow-2xl">
+    <div className="min-h-screen bg-black flex items-center justify-center p-4">
+      <div className="w-full max-w-6xl grid grid-cols-1 lg:grid-cols-2 bg-white rounded-3xl overflow-hidden shadow-2xl border-4 border-white">
         {/* Left Side - Hero Image */}
         <div className="relative p-8 lg:p-12 bg-black rounded-3xl lg:rounded-r-none hidden lg:block">
           <div className="absolute inset-0 rounded-3xl lg:rounded-r-none overflow-hidden">
@@ -199,7 +199,7 @@ function LoginForm() {
 
 export default function LoginPage() {
   return (
-    <Suspense fallback={<div className="min-h-screen flex items-center justify-center">Chargement...</div>}>
+    <Suspense fallback={<div className="min-h-screen bg-black flex items-center justify-center text-white">Chargement...</div>}>
       <LoginForm />
     </Suspense>
   );

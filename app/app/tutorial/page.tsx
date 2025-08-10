@@ -40,15 +40,6 @@ export default function TutorialPage() {
 
       {/* Tutorial Card */}
       <Card className="border-gray-200">
-        <CardHeader>
-          <CardTitle className="text-luxarma-text flex items-center gap-2">
-            <PlayCircle className="h-5 w-5 text-blue-600" />
-            Tutoriel Interactif
-          </CardTitle>
-          <CardDescription className="text-luxarma-subtext">
-            Cliquez sur "Start Demo" pour commencer le tutoriel pas-à-pas. Vous pouvez naviguer à votre rythme et revenir à tout moment.
-          </CardDescription>
-        </CardHeader>
         <CardContent>
           {/* Supademo Embed */}
           <div 

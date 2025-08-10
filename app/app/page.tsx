@@ -150,7 +150,6 @@ function ClientProjectOverviewContent() {
             
             {project.budget && (
               <div className="flex items-center gap-2 text-gray-600">
-                <DollarSign className="h-4 w-4" />
                 <span>{project.budget.toLocaleString('fr-FR')} €</span>
               </div>
             )}

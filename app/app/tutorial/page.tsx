@@ -38,59 +38,39 @@ export default function TutorialPage() {
         </p>
       </div>
 
-      {/* Tutorial Card */}
-      <Card className="border-gray-200">
-        <CardContent>
-          {/* Supademo Embed */}
-          <div 
-            style={{
-              position: "relative", 
-              boxSizing: "content-box", 
-              maxHeight: "80vh", 
-              width: "100%", 
-              aspectRatio: "2.0220082530949104", 
-              padding: "40px 0 40px 0"
-            }}
-            className="rounded-lg overflow-hidden shadow-lg border border-gray-200"
-          >
-            <iframe 
-              src="https://app.supademo.com/embed/cme5q2qs11re6h3pyr5uz9hi3?embed_v=2&utm_source=embed" 
-              loading="lazy" 
-              title="Luxarma Demo" 
-              allow="clipboard-write" 
-              frameBorder="0" 
+              {/* Tutorial Card */}
+        <Card className="border-gray-200">
+          <CardContent>
+            {/* Supademo Embed */}
+            <div 
               style={{
-                position: "absolute", 
-                top: 0, 
-                left: 0, 
+                position: "relative", 
+                boxSizing: "content-box", 
+                maxHeight: "80vh", 
                 width: "100%", 
-                height: "100%"
+                aspectRatio: "2.0220082530949104", 
+                padding: "40px 0 40px 0"
               }}
-              className="rounded-lg"
-            />
-          </div>
-        </CardContent>
-      </Card>
-
-      {/* Additional Help Section */}
-      <Card className="border-gray-200 bg-blue-50">
-        <CardHeader>
-          <CardTitle className="text-blue-900">Besoin d'aide supplémentaire ?</CardTitle>
-        </CardHeader>
-        <CardContent>
-          <div className="space-y-3 text-blue-800">
-            <p>
-              <strong>💡 Astuce :</strong> Vous pouvez revisionner ce tutoriel à tout moment en revenant sur cette page.
-            </p>
-            <p>
-              <strong>📞 Support :</strong> Si vous avez des questions après avoir regardé le tutoriel, n'hésitez pas à créer un ticket de support depuis l'onglet "Tickets".
-            </p>
-            <p>
-              <strong>🔄 Mise à jour :</strong> Ce tutoriel est régulièrement mis à jour pour refléter les nouvelles fonctionnalités de l'application.
-            </p>
-          </div>
-        </CardContent>
-      </Card>
+              className="rounded-lg overflow-hidden shadow-lg border border-gray-200"
+            >
+              <iframe 
+                src="https://app.supademo.com/embed/cme5q2qs11re6h3pyr5uz9hi3?embed_v=2&utm_source=embed" 
+                loading="lazy" 
+                title="Luxarma Demo" 
+                allow="clipboard-write" 
+                frameBorder="0" 
+                style={{
+                  position: "absolute", 
+                  top: 0, 
+                  left: 0, 
+                  width: "100%", 
+                  height: "100%"
+                }}
+                className="rounded-lg"
+              />
+            </div>
+          </CardContent>
+        </Card>
     </div>
   );
 }

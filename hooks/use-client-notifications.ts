@@ -67,6 +67,12 @@ export function useMarkClientNotificationAsRead() {
   
   return useMutation({
     mutationFn: async (notificationId: string) => {
+      // Get current user to ensure we're only updating their notifications
+      const user = await getCurrentUser();
+      if (!user?.client_id) {
+        throw new Error('Client not authenticated');
+      }
+
       const { data, error } = await supabase
         .from('notifications')
         .update({ 
@@ -74,6 +80,7 @@ export function useMarkClientNotificationAsRead() {
           read_at: new Date().toISOString()
         })
         .eq('id', notificationId)
+        .eq('client_id', user.client_id) // Additional security: only update own notifications
         .select()
         .single();
       
@@ -83,6 +90,7 @@ export function useMarkClientNotificationAsRead() {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['client-notifications'] });
       queryClient.invalidateQueries({ queryKey: ['client-notifications', 'unread-count'] });
+      toast.success("Notification marquée comme lue");
     },
     onError: (error) => {
       console.error('Erreur lors du marquage de la notification:', error);

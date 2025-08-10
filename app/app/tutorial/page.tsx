@@ -1,0 +1,105 @@
+"use client";
+
+import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import { PlayCircle } from "lucide-react";
+
+export default function TutorialPage() {
+  return (
+    <div className="p-8 space-y-8">
+      {/* Breadcrumb Navigation */}
+      <Breadcrumb>
+        <BreadcrumbList>
+          <BreadcrumbItem>
+            <BreadcrumbLink href="/app">Tableau de Bord</BreadcrumbLink>
+          </BreadcrumbItem>
+          <BreadcrumbSeparator />
+          <BreadcrumbItem>
+            <BreadcrumbPage>Tutoriel</BreadcrumbPage>
+          </BreadcrumbItem>
+        </BreadcrumbList>
+      </Breadcrumb>
+
+      {/* Header */}
+      <div className="space-y-2">
+        <h1 className="text-3xl font-bold text-gray-900 flex items-center gap-3">
+          <PlayCircle className="h-8 w-8 text-blue-600" />
+          Comment utiliser mon app ?
+        </h1>
+        <p className="text-gray-600 text-lg">
+          Regardez ce tutoriel interactif pour comprendre comment l'application fonctionne et découvrir toutes ses fonctionnalités.
+        </p>
+      </div>
+
+      {/* Tutorial Card */}
+      <Card className="border-gray-200">
+        <CardHeader>
+          <CardTitle className="text-luxarma-text flex items-center gap-2">
+            <PlayCircle className="h-5 w-5 text-blue-600" />
+            Tutoriel Interactif
+          </CardTitle>
+          <CardDescription className="text-luxarma-subtext">
+            Cliquez sur "Start Demo" pour commencer le tutoriel pas-à-pas. Vous pouvez naviguer à votre rythme et revenir à tout moment.
+          </CardDescription>
+        </CardHeader>
+        <CardContent>
+          {/* Supademo Embed */}
+          <div 
+            style={{
+              position: "relative", 
+              boxSizing: "content-box", 
+              maxHeight: "80vh", 
+              width: "100%", 
+              aspectRatio: "2.0220082530949104", 
+              padding: "40px 0 40px 0"
+            }}
+            className="rounded-lg overflow-hidden shadow-lg border border-gray-200"
+          >
+            <iframe 
+              src="https://app.supademo.com/embed/cme5q2qs11re6h3pyr5uz9hi3?embed_v=2&utm_source=embed" 
+              loading="lazy" 
+              title="Luxarma Demo" 
+              allow="clipboard-write" 
+              frameBorder="0" 
+              style={{
+                position: "absolute", 
+                top: 0, 
+                left: 0, 
+                width: "100%", 
+                height: "100%"
+              }}
+              className="rounded-lg"
+            />
+          </div>
+        </CardContent>
+      </Card>
+
+      {/* Additional Help Section */}
+      <Card className="border-gray-200 bg-blue-50">
+        <CardHeader>
+          <CardTitle className="text-blue-900">Besoin d'aide supplémentaire ?</CardTitle>
+        </CardHeader>
+        <CardContent>
+          <div className="space-y-3 text-blue-800">
+            <p>
+              <strong>💡 Astuce :</strong> Vous pouvez revisionner ce tutoriel à tout moment en revenant sur cette page.
+            </p>
+            <p>
+              <strong>📞 Support :</strong> Si vous avez des questions après avoir regardé le tutoriel, n'hésitez pas à créer un ticket de support depuis l'onglet "Tickets".
+            </p>
+            <p>
+              <strong>🔄 Mise à jour :</strong> Ce tutoriel est régulièrement mis à jour pour refléter les nouvelles fonctionnalités de l'application.
+            </p>
+          </div>
+        </CardContent>
+      </Card>
+    </div>
+  );
+}

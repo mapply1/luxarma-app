@@ -22,7 +22,8 @@ import {
   MessageSquare,
   Star,
   Bell,
-  Folder
+  Folder,
+  PlayCircle
 } from "lucide-react";
 import { ArrowSeparateVertical } from "iconoir-react";
 import { cn } from "@/lib/utils";
@@ -42,6 +43,12 @@ const navigation = [
     name: "Aperçu du Projet",
     href: "/app",
     icon: Home,
+    showCount: false,
+  },
+  {
+    name: "Tutoriel",
+    href: "/app/tutorial",
+    icon: PlayCircle,
     showCount: false,
   },
   {

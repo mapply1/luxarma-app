@@ -120,7 +120,8 @@ export interface Prospect {
   resume_auto?: string; // Résumé généré automatiquement
   notes_internes?: string;
   discovery_call_resume?: string; // Résumé manuel de l'appel de découverte
-  tally_submission_url?: string; // URL de soumission Tally
+  proposal_doc_url?: string; // URL du document de proposition généré par Make.com
+  quote_doc_url?: string; // URL du document de devis généré par Make.com
   documents?: string[]; // URLs des documents
   historique_interactions?: InteractionProspect[];
   created_at: string;

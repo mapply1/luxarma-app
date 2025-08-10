@@ -34,6 +34,8 @@ import {
   Send,
   ExternalLink
 } from "lucide-react";
+import { supabase } from "@/lib/supabase";
+import { toast } from "sonner";
 import { 
   AlertDialog,
   AlertDialogAction,
@@ -98,7 +100,8 @@ export default function ProspectDetailPage() {
   const [newNote, setNewNote] = useState('');
   const [isConversionModalOpen, setIsConversionModalOpen] = useState(false);
   const [discoveryCallResume, setDiscoveryCallResume] = useState('');
-  const [tallySubmissionUrl, setTallySubmissionUrl] = useState('');
+  const [proposalDocUrl, setProposalDocUrl] = useState('');
+  const [quoteDocUrl, setQuoteDocUrl] = useState('');
   const [isEditing, setIsEditing] = useState(false);
   const [isSendingWebhook, setIsSendingWebhook] = useState(false);
 
@@ -109,7 +112,8 @@ export default function ProspectDetailPage() {
   useEffect(() => {
     if (prospect) {
       setDiscoveryCallResume(prospect.discovery_call_resume || '');
-      setTallySubmissionUrl(prospect.tally_submission_url || '');
+      setProposalDocUrl(prospect.proposal_doc_url || '');
+      setQuoteDocUrl(prospect.quote_doc_url || '');
     }
   }, [prospect]);
 
@@ -161,7 +165,8 @@ export default function ProspectDetailPage() {
         id: prospect.id,
         updates: {
           discovery_call_resume: discoveryCallResume || null,
-          tally_submission_url: tallySubmissionUrl || null,
+          proposal_doc_url: proposalDocUrl || null,
+          quote_doc_url: quoteDocUrl || null,
         }
       });
       setIsEditing(false);
@@ -181,7 +186,8 @@ export default function ProspectDetailPage() {
       const webhookPayload = {
         ...prospect,
         discovery_call_resume: discoveryCallResume,
-        tally_submission_url: tallySubmissionUrl,
+        proposal_doc_url: proposalDocUrl,
+        quote_doc_url: quoteDocUrl,
       };
       
       const response = await fetch('https://hook.eu2.make.com/au2mvgv6utpw4hlp7atwmdja4b9m6qdh', {
@@ -516,14 +522,14 @@ export default function ProspectDetailPage() {
           </Card>
         )}
 
-        {/* Discovery Call Resume & Tally URL */}
+        {/* Discovery Call Resume & Document URLs */}
         <Card className="border-gray-200">
           <CardHeader>
             <div className="flex items-center justify-between">
               <div>
                 <CardTitle className="text-luxarma-text">Informations Complémentaires</CardTitle>
                 <CardDescription className="text-luxarma-subtext">
-                  Résumé d'appel et lien Tally
+                  Résumé d'appel et documents générés par Make.com
                 </CardDescription>
               </div>
               <div className="flex gap-2">
@@ -535,7 +541,8 @@ export default function ProspectDetailPage() {
                       onClick={() => {
                         setIsEditing(false);
                         setDiscoveryCallResume(prospect.discovery_call_resume || '');
-                        setTallySubmissionUrl(prospect.tally_submission_url || '');
+                        setProposalDocUrl(prospect.proposal_doc_url || '');
+                        setQuoteDocUrl(prospect.quote_doc_url || '');
                       }}
                     >
                       Annuler
@@ -590,30 +597,64 @@ export default function ProspectDetailPage() {
             
             <div>
               <label className="text-sm font-medium text-luxarma-text mb-2 block">
-                URL de soumission Tally
+                URL du document de proposition
               </label>
               {isEditing ? (
                 <Input
-                  value={tallySubmissionUrl}
-                  onChange={(e) => setTallySubmissionUrl(e.target.value)}
-                  placeholder="https://tally.so/submission/..."
+                  value={proposalDocUrl}
+                  onChange={(e) => setProposalDocUrl(e.target.value)}
+                  placeholder="https://..."
                   type="url"
                 />
               ) : (
                 <div className="bg-slate-50 p-4 rounded-lg border">
-                  {tallySubmissionUrl ? (
+                  {proposalDocUrl ? (
                     <a 
-                      href={tallySubmissionUrl}
+                      href={proposalDocUrl}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
                     >
-                      {tallySubmissionUrl}
+                      <FileText className="h-4 w-4" />
+                      Voir la proposition
                       <ExternalLink className="h-3 w-3" />
                     </a>
                   ) : (
                     <p className="text-luxarma-subtext italic">
-                      Aucune URL Tally enregistrée
+                      Aucune proposition générée
+                    </p>
+                  )}
+                </div>
+              )}
+            </div>
+            
+            <div>
+              <label className="text-sm font-medium text-luxarma-text mb-2 block">
+                URL du document de devis
+              </label>
+              {isEditing ? (
+                <Input
+                  value={quoteDocUrl}
+                  onChange={(e) => setQuoteDocUrl(e.target.value)}
+                  placeholder="https://..."
+                  type="url"
+                />
+              ) : (
+                <div className="bg-slate-50 p-4 rounded-lg border">
+                  {quoteDocUrl ? (
+                    <a 
+                      href={quoteDocUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-blue-600 hover:text-blue-800 hover:underline flex items-center gap-1"
+                    >
+                      <DollarSign className="h-4 w-4" />
+                      Voir le devis
+                      <ExternalLink className="h-3 w-3" />
+                    </a>
+                  ) : (
+                    <p className="text-luxarma-subtext italic">
+                      Aucun devis généré
                     </p>
                   )}
                 </div>

@@ -61,7 +61,8 @@ export function useProspect(prospectId: string) {
           resume_auto,
           notes_internes,
           discovery_call_resume,
-          tally_submission_url,
+          proposal_doc_url,
+          quote_doc_url,
           created_at,
           updated_at
         `)
